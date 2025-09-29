@@ -1,5 +1,4 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import BlogDetail from "./pages/BlogDetail";
@@ -8,22 +7,24 @@ import EditBlog from "./pages/EditBlog";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 
-const App = () => {
+function App() {
   return (
-    <div>
-      <Navbar />
-      <div className="max-w-5xl mx-auto p-4">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/blog/:id" element={<BlogDetail />} />
-          <Route path="/create" element={<CreateBlog />} />
-          <Route path="/edit/:id" element={<EditBlog />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-        </Routes>
+    <Router>
+      <div className="min-h-screen bg-gray-50 text-gray-900">
+        <Navbar />
+        <main className="container mx-auto px-4 py-6">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/blogs/:id" element={<BlogDetail />} />
+            <Route path="/create" element={<CreateBlog />} />
+            <Route path="/edit/:id" element={<EditBlog />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+          </Routes>
+        </main>
       </div>
-    </div>
+    </Router>
   );
-};
+}
 
 export default App;
