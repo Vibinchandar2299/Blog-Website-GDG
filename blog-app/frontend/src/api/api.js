@@ -1,15 +1,25 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "http://localhost:5000/api" });
+const API = axios.create({
+  baseURL: "http://localhost:5000/api",
+});
 
-export const signup = (data) => API.post("/auth/signup", data);
-export const login = (data) => API.post("/auth/login", data);
+API.interceptors.request.use((req) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    req.headers.Authorization = `Bearer ${token}`;
+  }
+  return req;
+});
+
+// API service functions
+export const signupUser = (userData) => API.post("/auth/signup", userData);
+export const loginUser = (userData) => API.post("/auth/login", userData);
 
 export const getBlogs = () => API.get("/blogs");
-export const getBlog = (id) => API.get(`/blogs/${id}`);
-export const createBlog = (data, token) =>
-  API.post("/blogs", data, { headers: { Authorization: `Bearer ${token}` } });
-export const updateBlog = (id, data, token) =>
-  API.put(`/blogs/${id}`, data, { headers: { Authorization: `Bearer ${token}` } });
-export const deleteBlog = (id, token) =>
-  API.delete(`/blogs/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+export const getBlogById = (id) => API.get(`/blogs/${id}`);
+export const createBlog = (blogData) => API.post("/blogs", blogData);
+export const updateBlog = (id, blogData) => API.put(`/blogs/${id}`, blogData);
+export const deleteBlog = (id) => API.delete(`/blogs/${id}`);
+
+export default API;
