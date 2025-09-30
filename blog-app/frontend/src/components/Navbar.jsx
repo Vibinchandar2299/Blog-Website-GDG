@@ -1,16 +1,31 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  // Always get user from localStorage on render
   const user = JSON.parse(localStorage.getItem("user"));
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    navigate("/login");
+    navigate("/login", { replace: true });
+    // Force a re-render by updating a dummy state
+    window.location.reload();
   };
+
+  // Sync user state with localStorage changes (e.g., after login/logout in other tabs)
+  useEffect(() => {
+    const syncUser = () => {
+      setUser(JSON.parse(localStorage.getItem("user")));
+    };
+    window.addEventListener("storage", syncUser);
+    return () => window.removeEventListener("storage", syncUser);
+  }, []);
+
+
+
 
   return (
     <nav className="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-white/20 shadow-lg">
@@ -48,7 +63,7 @@ const Navbar = () => {
                   </div>
                   <button 
                     onClick={handleLogout} 
-                    className="px-4 py-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors duration-200 font-medium"
+                    className="px-4 py-2 text-red-500 border border-red-400 rounded-lg font-medium bg-white hover:bg-red-50 hover:text-red-600 transition-colors duration-200 shadow-sm"
                   >
                     Logout
                   </button>

@@ -31,9 +31,7 @@ const Signup = () => {
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
         <div className="text-center">
-          <div className="mx-auto h-16 w-16 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center mb-6">
-            <span className="text-white font-bold text-2xl">B</span>
-          </div>
+          {/* Removed B symbol above Join BlogHub */}
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Join BlogHub</h2>
           <p className="text-gray-600">Create your account and start sharing your stories</p>
         </div>

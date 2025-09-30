@@ -2,15 +2,14 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { deleteBlog } from "../api/api";
 
-const BlogCard = ({ blog }) => {
+const BlogCard = ({ blog, onDelete }) => {
   const navigate = useNavigate();
   const loggedInUser = JSON.parse(localStorage.getItem("user"));
 
   const handleDelete = async () => {
     try {
       await deleteBlog(blog._id);
-      // Navigate to home to refresh the blog list
-      navigate("/");
+      if (onDelete) onDelete();
     } catch (error) {
       console.error("Error deleting blog:", error);
     }
@@ -18,13 +17,16 @@ const BlogCard = ({ blog }) => {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const now = new Date();
-    const diffTime = Math.abs(now - date);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+    // Zero out the time for both dates
+    const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const nowOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const diffTime = nowOnly - dateOnly;
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) return 'Today';
     if (diffDays === 1) return 'Yesterday';
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.ceil(diffDays / 7)} weeks ago`;
-    return date.toLocaleDateString();
+  if (diffDays < 7) return `${diffDays} days ago`;
+  return date.toLocaleDateString();
   };
 
   return (
