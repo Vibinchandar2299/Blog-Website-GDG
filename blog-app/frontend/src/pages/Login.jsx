@@ -10,16 +10,35 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const [error, setError] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
+    
     try {
       const res = await login({ email, password });
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
       navigate("/");
     } catch (error) {
-      console.error(error);
+      console.error("Login error:", error);
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        setError(error.response.data.message || "Login failed. Please try again.");
+        console.error("Error data:", error.response.data);
+        console.error("Error status:", error.response.status);
+      } else if (error.request) {
+        // The request was made but no response was received
+        setError("No response from server. Please check your connection.");
+        console.error("No response received:", error.request);
+      } else {
+        // Something happened in setting up the request
+        setError("An error occurred. Please try again.");
+        console.error('Error:', error.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -37,7 +56,12 @@ const Login = () => {
 
         {/* Form */}
         <div className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-2xl p-8 shadow-2xl">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          {error && (
+            <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+              {error}
+            </div>
+          )}
+          <form onSubmit={handleSubmit} className="space-y-6" autoComplete="off">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                 Email address
@@ -49,6 +73,7 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 placeholder-gray-400"
+                autoComplete="new-email"
                 required
               />
             </div>
@@ -64,6 +89,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200 placeholder-gray-400"
+                autoComplete="new-password"
                 required
               />
             </div>
