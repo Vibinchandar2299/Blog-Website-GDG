@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import { getBlogs } from "../api/api";
 import BlogCard from "../components/BlogCard";

@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { getBlogById, deleteBlog } from "../api/api";
@@ -41,10 +42,10 @@ const BlogDetail = () => {
     <div className="bg-white shadow-md rounded-xl p-6">
       <h1 className="text-3xl font-bold mb-2">{blog.title}</h1>
       <p className="text-sm text-gray-500 mb-4">
-        By {blog.author} • {new Date(blog.createdAt).toLocaleDateString()}
+        By {blog.author?.name || 'Unknown Author'} • {new Date(blog.createdAt).toLocaleDateString()}
       </p>
       <p className="text-gray-800 whitespace-pre-line">{blog.content}</p>
-      {loggedInUser && loggedInUser.id === blog.authorId && (
+      {loggedInUser && loggedInUser.id === blog.author?._id && (
         <div className="mt-6 flex gap-4">
           <Link
             to={`/edit/${blog._id}`}
