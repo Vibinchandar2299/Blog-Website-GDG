@@ -1,6 +1,13 @@
 /** @type {import('tailwindcss').Config} */
-import forms from '@tailwindcss/forms';
-import typography from '@tailwindcss/typography';
+let plugins = [];
+
+try {
+  const forms = require('@tailwindcss/forms');
+  const typography = require('@tailwindcss/typography');
+  plugins = [forms, typography];
+} catch (e) {
+  console.warn('Some Tailwind plugins are not installed. Running without them.');
+}
 
 export default {
   content: [
@@ -18,8 +25,5 @@ export default {
       },
     },
   },
-  plugins: [
-    forms,
-    typography,
-  ],
+  plugins,
 };
