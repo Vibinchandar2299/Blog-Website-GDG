@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
@@ -19,10 +19,9 @@ function App() {
   const user = JSON.parse(localStorage.getItem("user"));
   const token = localStorage.getItem("token");
   return (
-    <Router>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 text-gray-900">
-        <Navbar />
-        <Routes>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 text-gray-900">
+      <Navbar />
+      <Routes>
           {/* Public routes */}
           <Route
             path="/login"
@@ -75,7 +74,6 @@ function App() {
           />
         </Routes>
       </div>
-    </Router>
   );
 }
 
